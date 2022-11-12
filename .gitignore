@@ -1,0 +1,8 @@
+backend/.env
+.git
+.vscode
+mailer/
+postgresql/certs/out/
+frontend/
+admin/
+storage/

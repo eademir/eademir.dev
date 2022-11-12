@@ -1,0 +1,34 @@
+FROM golang:1.19-buster AS build
+
+WORKDIR /app
+
+# Copy the code from /app to the build folder into the container
+COPY go.mod .
+COPY go.sum .
+
+# Configure the build (go.mod and go.sum are already copied with prior step)
+RUN go mod download
+
+COPY . .
+
+# Build the application
+RUN go build -o /backend
+
+RUN ls
+
+## Deploy
+FROM gcr.io/distroless/base-debian10
+
+WORKDIR /
+
+COPY --from=build /backend /backend
+
+EXPOSE 8000
+
+USER nonroot:nonroot
+
+ENTRYPOINT ["/backend"]
+
+#  docker build -t backend:multistage -f Dockerfile.multistage . --progress=plain
+#TODO: shadow the infos
+# docker run -dp 8000:8000 --name backend  -e DB_PASSWORD=password -e DB_HOST=host.docker.internal  -e DB_NAME=name -e DB_USER=user backend:multistage 
