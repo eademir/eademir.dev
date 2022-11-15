@@ -22,5 +22,5 @@ CMD [ "-c", "ssl=on" , "-c", "ssl_cert_file=/var/lib/postgresql/postgresdb.crt",
     "ssl_ca_file=/var/lib/postgresql/myCA.crt", "-c", "ssl_crl_file=/var/lib/postgresql/myCA.crl" ]
 
 # docker build --rm -f "Dockerfile" -t postgres:ssl "."
-#TODO: shadow the infos
+
 # docker run -dp 5432:5432 --name database -e POSTGRES_PASSWORD=password -e POSTGRES_USER=user -e POSTGRES_DB=name postgres:ssl 

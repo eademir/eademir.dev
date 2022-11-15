@@ -30,5 +30,5 @@ USER nonroot:nonroot
 ENTRYPOINT ["/backend"]
 
 #  docker build -t backend:multistage -f Dockerfile.multistage . --progress=plain
-#TODO: shadow the infos
+
 # docker run -dp 8000:8000 --name backend  -e DB_PASSWORD=password -e DB_HOST=host.docker.internal  -e DB_NAME=name -e DB_USER=user backend:multistage 
