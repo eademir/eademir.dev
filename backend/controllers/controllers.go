@@ -103,7 +103,7 @@ func ReadBlog(c *gin.Context, db *sql.DB) {
 	sqlStatement := `SELECT * FROM blogs WHERE id = $1;`
 
 	row := db.QueryRow(sqlStatement, id)
-	err := row.Scan(&blog.ID, &blog.Title, &blog.Description, &blog.Content, &blog.Keywords, &blog.CreatedAt, &blog.UpdatedAt, &blog.IsShared)
+	err := row.Scan(&blog.ID, &blog.Title, &blog.Description, &blog.Content, &blog.Keywords, &blog.CreatedAt, &blog.UpdatedAt, &blog.IsShared, &blog.ImageURL)
 
 	// if no rows are returned, then the blog does not exist
 	switch err {
@@ -113,7 +113,13 @@ func ReadBlog(c *gin.Context, db *sql.DB) {
 		})
 	case nil:
 		c.JSON(http.StatusOK, gin.H{
-			"blog": blog,
+			"id": blog.ID,
+			"imageURL": blog.ImageURL,
+			"title": blog.Title,
+			"content": blog.Content,
+			"keywords": blog.Keywords,
+			"createdAt": blog.CreatedAt,
+			"updatedAt": blog.UpdatedAt,
 		})
 	default:
 		panic(err)
@@ -121,7 +127,7 @@ func ReadBlog(c *gin.Context, db *sql.DB) {
 }
 
 // Get all blogs from database function
-func ReadBlogs(c *gin.Context, db *sql.DB) {
+func ReadBlogs(c *gin.Context, db *sql.DB, isAdmin bool) {
 	blogs := []models.Blog{}
 
 	sqlStatement := `SELECT * FROM blogs;`
@@ -145,8 +151,8 @@ func ReadBlogs(c *gin.Context, db *sql.DB) {
 			panic(err)
 		}
 
-		//append blog to blogs if it is shared
-		if blog.IsShared {
+		//append blog to blogs if it is shared or admin logged in
+		if blog.IsShared || isAdmin {
 			blogs = append(blogs, blog)
 		}
 	}
@@ -314,11 +320,14 @@ func CreateUser(c *gin.Context, db *sql.DB) {
 	}
 }
 
-// user login post
+// user login posts
 func LoginPost(c *gin.Context, db *sql.DB) {
 	user := models.User{}
 	session := sessions.Default(c)
-	c.ShouldBindJSON(&user)
+	if err := c.BindJSON(&user); err != nil {
+		log.Println(err)
+		return
+	}
 
 	var hashedPassword string
 
@@ -326,31 +335,33 @@ func LoginPost(c *gin.Context, db *sql.DB) {
 
 	row := db.QueryRow(sqlStatement, user.Username)
 
-	if err := row.Scan(&hashedPassword); err != nil {
-		c.JSON(http.StatusBadRequest, gin.H{"message": "User is not found"})
+	if helpers.EmptyUserPass(user.Username, user.Password) {
+		c.JSON(http.StatusBadRequest, gin.H{"message": "Parameters can't be empty."})
+		log.Println("Parameters can't be empty")
 		return
 	}
 
-	if helpers.EmptyUserPass(user.Username, user.Password) {
-		c.JSON(http.StatusBadRequest, gin.H{"message": "Parameters can't be empty"})
+	if err := row.Scan(&hashedPassword); err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"message": "User is not found."})
+		log.Println("User is not found")
 		return
 	}
 
 	if !helpers.CheckUserPass(user.Username, user.Password, hashedPassword) {
-		c.JSON(http.StatusUnauthorized, gin.H{"message": "Incorrect username or password"})
+		c.JSON(http.StatusUnauthorized, gin.H{"message": "Incorrect username or password."})
+		log.Println("Incorrect username or password")
 		return
 	}
 
 	session.Set(globals.Userkey, user.Username)
 	session.Save()
 
-	c.Redirect(http.StatusMovedPermanently, "/admin")
+	c.JSON(http.StatusOK, gin.H{"message": "Success"})
 }
 
 // user login
-func Login(c *gin.Context, db *sql.DB) {
+func Dashboard(c *gin.Context, db *sql.DB) {
 	user := models.User{}
-	c.ShouldBindJSON(&user)
 
 	session := sessions.Default(c)
 	username := session.Get(globals.Userkey)

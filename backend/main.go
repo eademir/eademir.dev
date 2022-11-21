@@ -19,10 +19,9 @@ func main() {
 	defer db.Close()
 
 	public := r.Group("/")
-	public.Use(middleware.CORSMiddleware)
 	routes.PublicRoutes(public, db)
 
-	private := r.Group("/admin")
+	private := r.Group("/api/v1")
 	private.Use(middleware.AuthRequired)
 	routes.PrivateRoutes(private, db)
 

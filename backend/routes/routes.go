@@ -17,7 +17,7 @@ func PublicRoutes(g *gin.RouterGroup, db *sql.DB) {
 
 	// get all blogs
 	g.GET("/blogs", func(c *gin.Context) {
-		controllers.ReadBlogs(c, db)
+		controllers.ReadBlogs(c, db, false)
 	})
 
 	// get a blog
@@ -46,7 +46,7 @@ func PrivateRoutes(g *gin.RouterGroup, db *sql.DB) {
 
 	// admin get all blogs
 	g.GET("/blogs", func(c *gin.Context) {
-		controllers.ReadBlogs(c, db)
+		controllers.ReadBlogs(c, db, true)
 	})
 
 	// admin post a blog
@@ -109,8 +109,8 @@ func PrivateRoutes(g *gin.RouterGroup, db *sql.DB) {
 		controllers.Logout(c, db)
 	})
 
-	g.GET("/", func(c *gin.Context) {
-		controllers.Login(c, db)
+	g.GET("/dashboard", func(c *gin.Context) {
+		controllers.Dashboard(c, db)
 	})
 
 }

@@ -2,6 +2,7 @@ package controllers
 
 import (
 	"eademir.dev/globals"
+	"eademir.dev/middleware"
 
 	"github.com/gin-contrib/sessions"
 	"github.com/gin-contrib/sessions/cookie"
@@ -13,6 +14,7 @@ func SetupRouter() *gin.Engine {
 	r := gin.Default()
 	r.Use(gin.Logger())
 	r.Use(gin.Recovery())
+	r.Use(middleware.CORSMiddleware)
 
 	store := cookie.NewStore(globals.Secret)
 	r.Use(sessions.Sessions(globals.Userkey, store))
