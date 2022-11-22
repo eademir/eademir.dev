@@ -113,11 +113,11 @@ func ReadBlog(c *gin.Context, db *sql.DB) {
 		})
 	case nil:
 		c.JSON(http.StatusOK, gin.H{
-			"id": blog.ID,
-			"imageURL": blog.ImageURL,
-			"title": blog.Title,
-			"content": blog.Content,
-			"keywords": blog.Keywords,
+			"id":        blog.ID,
+			"imageURL":  blog.ImageURL,
+			"title":     blog.Title,
+			"content":   blog.Content,
+			"keywords":  blog.Keywords,
 			"createdAt": blog.CreatedAt,
 			"updatedAt": blog.UpdatedAt,
 		})
@@ -127,12 +127,12 @@ func ReadBlog(c *gin.Context, db *sql.DB) {
 }
 
 // Get all blogs from database function
-func ReadBlogs(c *gin.Context, db *sql.DB, isAdmin bool) {
-	blogs := []models.Blog{}
+func ReadBlogs(c *gin.Context, db *sql.DB, isAdmin bool, offset, limit int) {
+	blogs := []models.BlogGlance{}
 
-	sqlStatement := `SELECT * FROM blogs;`
+	sqlStatement := `SELECT id, title, description, is_shared, image_url FROM blogs ORDER BY id LIMIT $1 OFFSET $2;`
 
-	rows, err := db.Query(sqlStatement)
+	rows, err := db.Query(sqlStatement, limit, offset)
 	if err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{
 			"message": err,
@@ -143,17 +143,23 @@ func ReadBlogs(c *gin.Context, db *sql.DB, isAdmin bool) {
 
 	//iterate over rows
 	for rows.Next() {
-		blog := models.Blog{}
+		blogGlance := models.BlogGlance{}
 
 		//scan rows into blog struct
-		err = rows.Scan(&blog.ID, &blog.Username, &blog.Title, &blog.Description, &blog.Content, &blog.Keywords, &blog.CreatedAt, &blog.UpdatedAt, &blog.IsShared, &blog.ImageURL)
+		err = rows.Scan(
+			&blogGlance.ID,
+			&blogGlance.Title,
+			&blogGlance.Description,
+			&blogGlance.IsShared,
+			&blogGlance.ImageURL,
+		)
 		if err != nil {
 			panic(err)
 		}
 
 		//append blog to blogs if it is shared or admin logged in
-		if blog.IsShared || isAdmin {
-			blogs = append(blogs, blog)
+		if blogGlance.IsShared || isAdmin {
+			blogs = append(blogs, blogGlance)
 		}
 	}
 

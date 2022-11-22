@@ -1,6 +1,8 @@
 package routes
 
 import (
+	"strconv"
+
 	"github.com/gin-gonic/gin"
 
 	"database/sql"
@@ -17,7 +19,9 @@ func PublicRoutes(g *gin.RouterGroup, db *sql.DB) {
 
 	// get all blogs
 	g.GET("/blogs", func(c *gin.Context) {
-		controllers.ReadBlogs(c, db, false)
+		limit, _ := strconv.Atoi(c.Param("limit"))
+		offset, _ := strconv.Atoi(c.Param("ofsett"))
+		controllers.ReadBlogs(c, db, false, limit, offset)
 	})
 
 	// get a blog
@@ -46,7 +50,9 @@ func PrivateRoutes(g *gin.RouterGroup, db *sql.DB) {
 
 	// admin get all blogs
 	g.GET("/blogs", func(c *gin.Context) {
-		controllers.ReadBlogs(c, db, true)
+		limit, _ := strconv.Atoi(c.Query("limit"))
+		offset, _ := strconv.Atoi(c.Query("offset"))
+		controllers.ReadBlogs(c, db, true, offset, limit)
 	})
 
 	// admin post a blog
