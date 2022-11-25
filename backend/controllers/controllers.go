@@ -31,15 +31,18 @@ func CreateBlog(c *gin.Context, db *sql.DB) {
 	re, _ := regexp.Compile(`[^a-zA-Z0-9 _]+`)
 	blog.ID = strings.ReplaceAll(re.ReplaceAllString(strings.Trim(blog.Title, " "), ""), " ", "-") + "-" + time.Format("020106")
 
-	sqlStatement := `INSERT INTO blogs (id, title, description, content, keywords, username) VALUES ($1, $2, $3, $4, $5, $6) RETURNING id`
+	sqlStatement := `INSERT INTO blogs (id, title, description, content, keywords, username, is_shared, image_url) VALUES ($1, $2, $3, $4, $5, $6, $7, $8) RETURNING id`
 
-	err := db.QueryRow(sqlStatement, blog.ID, blog.Title, blog.Description, blog.Content, blog.Keywords, user).Scan(&blog.ID)
+	err := db.QueryRow(sqlStatement, blog.ID, blog.Title, blog.Description, blog.Content, blog.Keywords, user, blog.IsShared, blog.ImageURL).Scan(&blog.ID)
 	if err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{
 			"message": err,
 		})
 		return
 	}
+	c.JSON(http.StatusOK, gin.H{
+		"message": "success",
+	})
 }
 
 // Update a blog
@@ -49,32 +52,32 @@ func UpdateBlog(c *gin.Context, db *sql.DB) {
 	//get id from URL
 	id := c.Param("id")
 
-	c.BindJSON(&blog)
+	c.ShouldBindJSON(&blog)
 
-	blog.UpdatedAt = time.Now()
+	time := time.Now()
+	re, _ := regexp.Compile(`[^a-zA-Z0-9 _]+`)
+	blog.ID = strings.ReplaceAll(re.ReplaceAllString(strings.Trim(blog.Title, " "), ""), " ", "-") + "-" + time.Format("020106")
 
-	sqlStatement := `Update blogs SET  title = $2, description = $3, content = $4, keywords = $5, edited_at = $6 WHERE id = $1;`
+	sqlStatement := `UPDATE blogs SET id = $7,  title = $2, description = $3, content = $4, keywords = $5, edited_at = $6, is_shared = $8, image_url = $9 WHERE id = $1;`
 
-	_, err := db.Exec(sqlStatement, id, blog.Title, blog.Description, blog.Content, blog.Keywords, blog.UpdatedAt)
+	_, err := db.Exec(sqlStatement, id, blog.Title, blog.Description, blog.Content, blog.Keywords, time, blog.ID, blog.IsShared, blog.ImageURL)
 	if err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{
 			"message": err,
 		})
 		return
 	}
+
+	c.JSON(http.StatusOK, gin.H{
+		"message": "success",
+	})
 }
 
 // Delete handler by id from database
 func DeleteHandler(c *gin.Context, db *sql.DB, table string) {
 
 	//get id from URL and convert to int
-	id, errID := strconv.Atoi(c.Param("id"))
-	if errID != nil {
-		c.JSON(http.StatusBadRequest, gin.H{
-			"message": "Invalid id",
-		})
-		return
-	}
+	id := c.Param("id")
 
 	sqlStatement := `Delete FROM ` + table + ` WHERE id = $1;`
 
@@ -86,24 +89,21 @@ func DeleteHandler(c *gin.Context, db *sql.DB, table string) {
 		})
 		return
 	}
+	c.JSON(http.StatusOK, gin.H{
+		"message": "success",
+	})
 }
 
 // get a blog from database
 func ReadBlog(c *gin.Context, db *sql.DB) {
 	blog := models.Blog{}
 
-	//get id from URL and convert to int
-	id, errID := strconv.Atoi(c.Param("id"))
-	if errID != nil {
-		c.JSON(http.StatusBadRequest, gin.H{
-			"message": "Invalid id",
-		})
-		return
-	}
+	id := c.Param("id")
+
 	sqlStatement := `SELECT * FROM blogs WHERE id = $1;`
 
 	row := db.QueryRow(sqlStatement, id)
-	err := row.Scan(&blog.ID, &blog.Title, &blog.Description, &blog.Content, &blog.Keywords, &blog.CreatedAt, &blog.UpdatedAt, &blog.IsShared, &blog.ImageURL)
+	err := row.Scan(&blog.ID, &blog.Username, &blog.Title, &blog.Description, &blog.Content, &blog.Keywords, &blog.CreatedAt, &blog.UpdatedAt, &blog.IsShared, &blog.ImageURL)
 
 	// if no rows are returned, then the blog does not exist
 	switch err {
@@ -113,13 +113,14 @@ func ReadBlog(c *gin.Context, db *sql.DB) {
 		})
 	case nil:
 		c.JSON(http.StatusOK, gin.H{
-			"id":        blog.ID,
-			"imageURL":  blog.ImageURL,
-			"title":     blog.Title,
-			"content":   blog.Content,
-			"keywords":  blog.Keywords,
-			"createdAt": blog.CreatedAt,
-			"updatedAt": blog.UpdatedAt,
+			"id":          blog.ID,
+			"imageURL":    blog.ImageURL,
+			"title":       blog.Title,
+			"description": blog.Description,
+			"content":     blog.Content,
+			"keywords":    blog.Keywords,
+			"createdAt":   blog.CreatedAt,
+			"updatedAt":   blog.UpdatedAt,
 		})
 	default:
 		panic(err)
@@ -129,8 +130,13 @@ func ReadBlog(c *gin.Context, db *sql.DB) {
 // Get all blogs from database function
 func ReadBlogs(c *gin.Context, db *sql.DB, isAdmin bool, offset, limit int) {
 	blogs := []models.BlogGlance{}
+	var count int
 
 	sqlStatement := `SELECT id, title, description, is_shared, image_url FROM blogs ORDER BY id LIMIT $1 OFFSET $2;`
+
+	if err := db.QueryRow("SELECT COUNT(*) FROM blogs").Scan(&count); err != nil {
+		log.Fatal(err)
+	}
 
 	rows, err := db.Query(sqlStatement, limit, offset)
 	if err != nil {
@@ -165,7 +171,8 @@ func ReadBlogs(c *gin.Context, db *sql.DB, isAdmin bool, offset, limit int) {
 
 	//return blogs json with status code 200
 	c.JSON(http.StatusOK, gin.H{
-		"blogs": blogs,
+		"blogs":      blogs,
+		"totalBlogs": count,
 	})
 }
 
