@@ -3,6 +3,5 @@ backend/.env
 .vscode
 mailer/
 postgresql/certs/out/
-frontend/
-admin/
+
 storage/

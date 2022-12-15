@@ -7,7 +7,7 @@ import (
 	models "eademir.dev/models"
 )
 
-func CheckUserPass(username, password, hashedPassword string) bool {
+func CheckUserPass(password, hashedPassword string) bool {
 	user := models.User{}
 	err := user.ComparePassword([]byte(password), []byte(hashedPassword))
 	if err != nil {

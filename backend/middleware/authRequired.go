@@ -12,7 +12,7 @@ import (
 func AuthRequired(c *gin.Context) {
 	session := sessions.Default(c)
 	if user := session.Get(globals.Userkey); user == nil {
-		log.Println("User not logged in")
+		log.Println("User is not logged in")
 		c.AbortWithStatusJSON(http.StatusUnauthorized, gin.H{"message": "unauthorized"})
 		return
 	}

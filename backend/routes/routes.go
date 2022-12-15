@@ -19,9 +19,9 @@ func PublicRoutes(g *gin.RouterGroup, db *sql.DB) {
 
 	// get all blogs
 	g.GET("/blogs", func(c *gin.Context) {
-		limit, _ := strconv.Atoi(c.Param("limit"))
-		offset, _ := strconv.Atoi(c.Param("ofsett"))
-		controllers.ReadBlogs(c, db, false, limit, offset)
+		limit, _ := strconv.Atoi(c.Query("limit"))
+		offset, _ := strconv.Atoi(c.Query("offset"))
+		controllers.ReadBlogs(c, db, false, offset, limit)
 	})
 
 	// get a blog
@@ -80,14 +80,14 @@ func PrivateRoutes(g *gin.RouterGroup, db *sql.DB) {
 		controllers.ReadProjects(c, db)
 	})
 
+	//admin get project
+	g.GET("/projects/:id", func(c *gin.Context) {
+		controllers.ReadProject(c, db)
+	})
+
 	// admin post a project
 	g.POST("/projects", func(c *gin.Context) {
 		controllers.CreateProject(c, db)
-	})
-
-	// admin get a project
-	g.GET("/projects/:id", func(c *gin.Context) {
-		controllers.ReadProject(c, db)
 	})
 
 	// admin update a project
@@ -119,4 +119,11 @@ func PrivateRoutes(g *gin.RouterGroup, db *sql.DB) {
 		controllers.Dashboard(c, db)
 	})
 
+	g.PUT("/user", func(c *gin.Context) {
+		controllers.UpdateUser(c, db)
+	})
+
+	g.GET("/user", func(c *gin.Context) {
+		controllers.ReadUser(c, db)
+	})
 }

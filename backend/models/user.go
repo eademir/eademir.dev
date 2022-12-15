@@ -7,16 +7,17 @@ import (
 )
 
 type User struct {
-	ID        int       `json:"id"`
-	Username  string    `json:"username"`
-	Email     string    `json:"email"`
-	Password  string    `json:"password"`
-	CreatedAt time.Time `json:"created_at"`
+	ID          int       `json:"id"`
+	Username    string    `json:"username"`
+	Email       string    `json:"email"`
+	Password    string    `json:"password"`
+	NewPassword string    `json:"new_password"`
+	CreatedAt   time.Time `json:"created_at"`
 }
 
-func (user *User) HashPassword(password string) {
+func (user *User) HashPassword(password string) string {
 	hashedPassword, _ := bcrypt.GenerateFromPassword([]byte(password), bcrypt.DefaultCost)
-	user.Password = string(hashedPassword)
+	return string(hashedPassword)
 }
 
 func (user *User) ComparePassword(password, hashedPassword []byte) error {
