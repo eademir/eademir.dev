@@ -19,6 +19,18 @@
     onDestroy(() => ($currentPath = null));
 </script>
 
+<svelte:head>
+    {#await promise then project}
+        <title>Blogs - eademir.dev</title>
+        <meta name="description" content={project[0].description} />
+        <meta
+            name="keywords"
+            content="eray, software, developer, flutter, golang, javascript, svelte, gin gonic, projects"
+        />
+        <meta name="author" content="Eray" />
+    {/await}
+</svelte:head>
+
 <div class="grid grid-cols-1 gap-4 text-black dark:text-white p-4">
     {#await promise}
         <Loading />

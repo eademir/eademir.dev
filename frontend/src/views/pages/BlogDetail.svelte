@@ -95,7 +95,11 @@
             <h1 class="md:text-center w-full font-bold font-sans">
                 {data.title}
             </h1>
-            <div class="grid grid-row absolute top-0 right-0">
+        </div>
+        <div class="relative overflow-hidden w-full min-h-[300px]">
+            <div
+                class="grid grid-row absolute top-0 right-0 z-10 text-gray-100 bg-slate-700 p-2 rounded-l"
+            >
                 <small
                     >Created:
                     {new Date(Date.parse(data.createdAt)).getDate()}
@@ -117,8 +121,6 @@
                     >
                 {/if}
             </div>
-        </div>
-        <div class="relative overflow-hidden w-full min-h-[300px]">
             <img
                 class="absolute m-auto top-[-9999px] left-[-9999px] bottom-[-9999px] right-[-9999px]"
                 src={data.imageURL}

@@ -16,9 +16,9 @@ COPY --from=build /app/dist/ ./dist
 COPY --from=build /app/package*.json .
 RUN npm i --production
 
-EXPOSE 3000
+EXPOSE 3100
 
 CMD npm run preview
 
-# docker build . -t eademir/blog:panel 
-# docker run -dp 3000:3000 --name panel eademir/blog:panel
+# docker build . -t eademir/blog:frontend 
+# docker run -dp 3100:3100 --name frontend eademir/blog:frontend

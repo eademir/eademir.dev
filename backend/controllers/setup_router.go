@@ -16,7 +16,7 @@ func SetupRouter() *gin.Engine {
 	r.Use(gin.Recovery())
 
 	config := cors.DefaultConfig()
-	config.AllowOrigins = []string{"http://localhost:5173", "http://127.0.0.1:5173", "http://127.0.0.1:5174", "http://localhost:5174"}
+	config.AllowOrigins = []string{"http://localhost:3000", "http://127.0.0.1:3000", "http://127.0.0.1:3100", "http://localhost:3100"}
 	config.AllowMethods = []string{"GET", "POST", "DELETE", "PUT", "OPTIONS"}
 	config.AllowCredentials = true
 	config.AllowHeaders = []string{"Content-Type", "Content-Length", "Accept-Encoding", "X-CSRF-Token", "Authorization", "accept", "origin", "Cache-Control", "X-Requested-With"}

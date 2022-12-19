@@ -173,7 +173,7 @@
                                         a-well, a bird, bird, bird, well-a bird is
                                         the word
                                     </p>
-                                    <!--
+
                                     <iframe
                                         src="https://www.youtube.com/embed/9Gc4QTqslN4"
                                         title="YouTube video player"
@@ -181,7 +181,7 @@
                                         allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
                                         allowfullscreen
                                     />
-                                    -->
+
                                     <h4 class="text-xl font-semibold mb-6">
                                         AND
                                     </h4>
@@ -189,15 +189,14 @@
                                         bad boys bad boys whatcha gonna do<br />
                                         whatcha gonna do when they come for you
                                     </p>
-                                    <!--
-                                        <iframe
+
+                                    <iframe
                                         src="https://www.youtube.com/embed/Zd68AthoNIw"
                                         title="YouTube video player"
                                         frameborder="0"
                                         allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
                                         allowfullscreen
-                                        />
-                                    -->
+                                    />
                                 </div>
                             </div>
                         </div>
@@ -220,8 +219,8 @@
         );
     }
 
-    /*iframe {
+    iframe {
         padding-top: 10px;
         padding-bottom: 10px;
-    }*/
+    }
 </style>

@@ -6,6 +6,19 @@
   onDestroy(() => ($currentPath = null));
 </script>
 
+<svelte:head>
+  <title>Contact - eademir.dev</title>
+  <meta
+    name="description"
+    content="Got a question? Want to send a feedback? Need details about some of my blogs? Hire me for a freelance project? Let me know."
+  />
+  <meta
+    name="keywords"
+    content="eray, software, developer, flutter, golang, javascript, svelte, gin gonic, contact, blog"
+  />
+  <meta name="author" content="Eray" />
+</svelte:head>
+
 <div>
   <section class="bg-white dark:bg-gray-900">
     <div class="py-8 lg:py-16 px-4 mx-auto max-w-screen-md">

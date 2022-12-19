@@ -14,6 +14,15 @@
     onDestroy(() => ($currentPath = null));
 </script>
 
+<svelte:head>
+        {#await promise then about}
+        <title>About - eademir.dev</title>
+        <meta name="description" content={about.detail} />
+        <meta name="keywords" content="eray, software, developer, flutter, golang, javascript, svelte, gin gonic" />
+        <meta name="author" content="Eray" />
+        {/await}
+</svelte:head>
+
 <div
     class="flex flex-col m-auto items-center w-full 2xl:w-2/3 md:flex-row p-4 gap-4"
 >
