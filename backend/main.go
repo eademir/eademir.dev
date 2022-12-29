@@ -25,5 +25,5 @@ func main() {
 	private.Use(middleware.AuthRequired)
 	routes.PrivateRoutes(private, db)
 
-	r.Run(":8000")
+	r.Run()
 }

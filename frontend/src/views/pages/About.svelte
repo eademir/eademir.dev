@@ -5,7 +5,7 @@
 
     onMount(() => ($currentPath = window.location.pathname));
     const getAbout = async () => {
-        var response = await fetch("http://localhost:8000/");
+        var response = await fetch("/api/v1");
         var result = await response.json();
         return result.about;
     };
@@ -15,12 +15,15 @@
 </script>
 
 <svelte:head>
-        {#await promise then about}
+    {#await promise then about}
         <title>About - eademir.dev</title>
         <meta name="description" content={about.detail} />
-        <meta name="keywords" content="eray, software, developer, flutter, golang, javascript, svelte, gin gonic" />
+        <meta
+            name="keywords"
+            content="eray, software, developer, flutter, golang, javascript, svelte, gin gonic"
+        />
         <meta name="author" content="Eray" />
-        {/await}
+    {/await}
 </svelte:head>
 
 <div

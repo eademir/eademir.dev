@@ -14,7 +14,7 @@
     let id = undefined;
 
     const getProjects = async () =>
-        await fetch("http://localhost:8000/api/v1/projects", {
+        await fetch("/api/v1/projects", {
             method: "GET",
             credentials: "include",
         })
@@ -29,7 +29,7 @@
     let promise = getProjects();
 
     const deleteProject = async () => {
-        const url = "http://localhost:8000/api/v1/projects/" + id;
+        const url = "/api/v1/projects/" + id;
 
         await fetch(url, {
             method: "DELETE",

@@ -13,7 +13,7 @@
     });
 
     async function loginRequest() {
-        await fetch("http://localhost:8000/login", {
+        await fetch("/login", {
             method: "POST",
             headers: {
                 "Content-Type": "application/json; charset=utf-8",

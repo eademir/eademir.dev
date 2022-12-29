@@ -7,7 +7,7 @@
 
     onMount(
         async () =>
-            await fetch("http://localhost:8000/api/v1/dashboard", {
+            await fetch("/api/v1/dashboard", {
                 method: "GET",
                 credentials: "include",
             })

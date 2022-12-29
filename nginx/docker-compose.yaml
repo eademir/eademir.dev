@@ -1,0 +1,50 @@
+version: "3.9"
+
+services:
+  nginx:
+    image: eademir/blog:website
+    ports:
+      - "443:443"
+      - "80:80"
+    restart: always
+    depends_on:
+      - backend
+    volumes:
+      - ./data/certbot/conf:/etc/letsencrypt
+      - ./data/certbot/www:/var/www/certbot
+      - ./nginx/cache:/data/nginx/cache
+    command: "/bin/sh -c 'while :; do sleep 6h & wait $${!}; nginx -s reload; done & nginx -g \"daemon off;\"'"
+    container_name: nginx
+
+  database:
+    image: eademir/blog:postgres
+    container_name: database
+    env_file:
+      - ./database/.env
+    restart: always
+    ports:
+      - "5432"
+
+  backend:
+    image: eademir/blog:backend
+    container_name: backend
+    env_file:
+      - ./backend/.env
+    deploy:
+      resources:
+        limits:
+          cpus: "0.5"
+          memory: 50M
+      restart_policy:
+        condition: on-failure
+    depends_on:
+      - database
+    ports:
+      - "8080"
+
+  certbot:
+    image: certbot/certbot:latest
+    volumes:
+      - ./data/certbot/conf:/etc/letsencrypt
+      - ./data/certbot/www:/var/www/certbot
+    entrypoint: "/bin/sh -c 'trap exit TERM; while :; do certbot renew; sleep 12h & wait $${!}; done;'"

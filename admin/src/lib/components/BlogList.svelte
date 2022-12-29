@@ -7,7 +7,7 @@
     let offset = limit * page;
 
     let url =
-        "http://localhost:8000/api/v1/blogs?limit=" +
+        "/api/v1/blogs?limit=" +
         limit +
         "&offset=" +
         offset;

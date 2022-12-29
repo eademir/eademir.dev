@@ -42,7 +42,7 @@
             multiplier * (element2.scrollHeight - element1.clientHeight);
     };
 
-    const url = "http://localhost:8000/api/v1/blogs/" + id;
+    const url = "/api/v1/blogs/" + id;
 
     const getBlog = async () =>
         await fetch(url, {
@@ -101,7 +101,7 @@
             });
 
     const createBlog = async (is_shared) =>
-        await fetch("http://localhost:8000/api/v1/blogs", {
+        await fetch("/api/v1/blogs", {
             method: "POST",
             body: JSON.stringify({
                 title,
@@ -122,7 +122,7 @@
             });
 
     async function check() {
-        await fetch("http://localhost:8000/api/v1/dashboard", {
+        await fetch("/api/v1/dashboard", {
             method: "GET",
             credentials: "include",
         })

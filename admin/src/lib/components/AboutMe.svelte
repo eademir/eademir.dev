@@ -3,7 +3,7 @@
 
     import Loading from "./Loading.svelte";
 
-    const url = "http://localhost:8000/api/v1/about";
+    const url = "/api/v1/about";
 
     $: detail = "";
     $: image_url = "";

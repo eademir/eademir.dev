@@ -10,7 +10,7 @@
     $: id = 0;
 
     async function getUser() {
-        const res = await fetch("http://localhost:8000/api/v1/user", {
+        const res = await fetch("/api/v1/user", {
             method: "GET",
             credentials: "include",
         });
@@ -25,7 +25,7 @@
     }
 
     async function updateUser() {
-        const res = await fetch("http://localhost:8000/api/v1/user", {
+        const res = await fetch("/api/v1/user", {
             method: "PUT",
             credentials: "include",
             body: JSON.stringify({
@@ -55,7 +55,7 @@
 
 <div class="text-black dark:text-white p-4">
     {#await promise}
-        <Loading/>
+        <Loading />
     {:then a}
         <div class="max-w-xl m-auto">
             <div class="mb-6">

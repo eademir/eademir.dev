@@ -1,7 +1,6 @@
 <script>
     "user strict";
     import { activePage, isPopUpVisable, showToast } from "../../stores";
-    import { onMount } from "svelte";
     import Dashboard from "../components/Dashboard.svelte";
     import BlogList from "../components/BlogList.svelte";
     import Sidebar from "../components/Sidebar.svelte";
@@ -10,7 +9,6 @@
     import AboutMe from "../components/AboutMe.svelte";
     import PopUp from "../components/PopUp.svelte";
     import Toast from "../components/Toast.svelte";
-    import { navigate } from "svelte-navigator";
 
     let index = 0;
     let popup = false;

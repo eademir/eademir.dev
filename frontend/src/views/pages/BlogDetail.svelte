@@ -21,7 +21,7 @@
         "December",
     ];
 
-    const url = "http://localhost:8000/blogs/" + id;
+    const url = "/api/v1/blogs/" + id;
 
     async function getBlog() {
         let res = await fetch(url);
@@ -145,6 +145,8 @@
         :global(pre) {
             background-color: #ddd;
             padding: 20px;
+            max-width: 100% !important;
+            overflow-x: auto;
         }
         :global(code) {
             background-color: #ddd;
@@ -154,6 +156,8 @@
         :global(pre) {
             padding: 20px;
             background-color: #333;
+            max-width: 100% !important;
+            overflow-x: auto;
         }
         :global(code) {
             background-color: #333;

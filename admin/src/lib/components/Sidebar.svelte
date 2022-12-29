@@ -8,7 +8,7 @@
     };
 
     let logout = async () =>
-        await fetch("http://localhost:8000/api/v1/logout", {
+        await fetch("/api/v1/logout", {
             method: "POST",
             credentials: "include",
             redirect: "follow",

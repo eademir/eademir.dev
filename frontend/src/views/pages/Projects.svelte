@@ -4,7 +4,7 @@
     import { currentPath } from "../../stores";
 
     const getProjects = async () =>
-        await fetch("http://localhost:8000/projects")
+        await fetch("/api/v1/projects")
             .then((response) => response.json())
             .then((data) => {
                 return data.projects;

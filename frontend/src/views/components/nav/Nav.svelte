@@ -1,7 +1,13 @@
 <script>
 	import NavItem from "./NavItem.svelte";
 	import Logo from "../../../assets/logo.svg";
+	import { fly } from "svelte/transition";
+
+	let x = 0;
+	$: isNavVisible = x > 768 ? true : false;
 </script>
+
+<svelte:window bind:innerWidth={x} />
 
 <nav
 	class="bg-white px-2 sm:px-4 py-2.5 dark:bg-gray-900 fixed w-full z-20 top-0 left-0 border-b border-gray-200 dark:border-gray-600"
@@ -16,40 +22,56 @@
 		</a>
 		<div class="flex md:order-2">
 			<button
-				data-collapse-toggle="navbar-sticky"
 				type="button"
 				class="inline-flex items-center p-2 text-sm text-gray-500 rounded-lg md:hidden hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-gray-200 dark:text-gray-400 dark:hover:bg-gray-700 dark:focus:ring-gray-600"
-				aria-controls="navbar-sticky"
-				aria-expanded="false"
+				on:click={() => (isNavVisible = !isNavVisible)}
 			>
-				<span class="sr-only">Open main menu</span>
-				<svg
-					class="w-6 h-6"
-					aria-hidden="true"
-					fill="currentColor"
-					viewBox="0 0 20 20"
-					xmlns="http://www.w3.org/2000/svg"
-					><path
-						fill-rule="evenodd"
-						d="M3 5a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zM3 10a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zM3 15a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1z"
-						clip-rule="evenodd"
-					/></svg
-				>
+				{#if isNavVisible}
+					<span class="sr-only">Close main menu</span>
+					<svg
+						class="w-6 h-6"
+						aria-hidden="true"
+						xmlns="http://www.w3.org/2000/svg"
+						fill="currentColor"
+						viewBox="0 0 20 20"
+					>
+						<path
+							d="M4.646 4.646a.5.5 0 0 1 .708 0L8 7.293l2.646-2.647a.5.5 0 0 1 .708.708L8.707 8l2.647 2.646a.5.5 0 0 1-.708.708L8 8.707l-2.646 2.647a.5.5 0 0 1-.708-.708L7.293 8 4.646 5.354a.5.5 0 0 1 0-.708z"
+						/>
+					</svg>
+				{:else}
+					<span class="sr-only">Open main menu</span>
+					<svg
+						class="w-6 h-6"
+						aria-hidden="true"
+						fill="currentColor"
+						viewBox="0 0 20 20"
+						xmlns="http://www.w3.org/2000/svg"
+						><path
+							fill-rule="evenodd"
+							d="M3 5a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zM3 10a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zM3 15a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1z"
+							clip-rule="evenodd"
+						/></svg
+					>
+				{/if}
 			</button>
 		</div>
-		<div
-			class="items-center justify-between hidden w-full md:flex md:w-auto md:order-1"
-			id="navbar-sticky"
-		>
-			<ul
-				class="flex flex-col p-4 mt-4 border border-gray-100 rounded-lg bg-gray-50 md:flex-row md:space-x-8 md:mt-0 md:text-sm md:font-medium md:border-0 md:bg-white dark:bg-gray-800 md:dark:bg-gray-900 dark:border-gray-700"
+		{#if isNavVisible}
+			<div
+				class="items-center justify-between w-full md:flex md:w-auto md:order-1"
+				out:fly={{ x: -500 }}
+				in:fly={{ x: +500 }}
 			>
-				<NavItem route="/blogs" item="Blogs" />
-				<NavItem route="/" item="About Me" />
-				<NavItem route="/projects" item="Projects" />
-				<NavItem route="/contact" item="Contact" />
-			</ul>
-		</div>
+				<ul
+					class="flex flex-col p-4 mt-4 border border-gray-100 rounded-lg bg-gray-50 md:flex-row md:space-x-8 md:mt-0 md:text-sm md:font-medium md:border-0 md:bg-white dark:bg-gray-800 md:dark:bg-gray-900 dark:border-gray-700"
+				>
+					<NavItem route="/blogs" item="Blogs" />
+					<NavItem route="/" item="About Me" />
+					<NavItem route="/projects" item="Projects" />
+					<NavItem route="/contact" item="Contact" />
+				</ul>
+			</div>
+		{/if}
 	</div>
 </nav>
 

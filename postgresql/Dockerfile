@@ -1,5 +1,5 @@
 # This Dockerfile contains the image specification of our database
-FROM postgres:14-alpine
+FROM --platform=linux/amd64 postgres:14-alpine
 
 COPY ./certs/out/postgresdb.key /var/lib/postgresql
 COPY ./certs/out/postgresdb.crt /var/lib/postgresql

@@ -10,13 +10,12 @@
     let offset = limit * page;
 
     async function getBlogs() {
-        let url =
-            "http://localhost:8000/blogs?limit=" + limit + "&offset=" + offset;
+        let url = "/api/v1/blogs?limit=" + limit + "&offset=" + offset;
 
         let res = await fetch(url, { method: "GET" });
 
         if (res.ok) {
-            return res.json();
+            return res.clone().json();
         } else {
             throw new Error();
         }
@@ -29,12 +28,15 @@
 </script>
 
 <svelte:head>
-        {#await promise then blogs}
+    {#await promise then blogs}
         <title>Blogs - eademir.dev</title>
         <meta name="description" content={blogs.blog[0].description} />
-        <meta name="keywords" content="eray, software, developer, flutter, golang, javascript, svelte, gin gonic, blogs" />
+        <meta
+            name="keywords"
+            content="eray, software, developer, flutter, golang, javascript, svelte, gin gonic, blogs"
+        />
         <meta name="author" content="Eray" />
-        {/await}
+    {/await}
 </svelte:head>
 
 <div class="grid grid-cols-1 gap-4 text-black dark:text-white p-4" use:links>
@@ -80,8 +82,8 @@
                 >
             {/each}
         </ul>
-    {:catch}
-        {Error}
+    {:catch err}
+        {err}
     {/await}
 </div>
 

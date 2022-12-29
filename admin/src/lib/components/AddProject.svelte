@@ -8,7 +8,7 @@
     const submit = () => dispatch("submit");
 
     export let id;
-    const url = "http://localhost:8000/api/v1/projects/" + id;
+    const url = "/api/v1/projects/" + id;
 
     let project;
     let message;
@@ -58,7 +58,7 @@
     };
 
     const addProject = async () => {
-        const url = "http://localhost:8000/api/v1/projects";
+        const url = "/api/v1/projects";
         const images =
             image !== "" && image !== undefined
                 ? image.split(",").map((e) => e.trim())
@@ -177,7 +177,6 @@
                             >Description</label
                         >
                         <textarea
-                            type="text"
                             id="description"
                             name="description"
                             class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
@@ -192,7 +191,6 @@
                             >Links</label
                         >
                         <textarea
-                            type="text"
                             id="links"
                             name="links"
                             class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
@@ -207,7 +205,6 @@
                             >Images</label
                         >
                         <textarea
-                            type="text"
                             id="images"
                             name="images"
                             class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"

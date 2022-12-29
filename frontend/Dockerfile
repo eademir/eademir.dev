@@ -1,4 +1,4 @@
-FROM node:18.12.1-alpine3.16 AS build
+FROM --platform=linux/amd64 node:18.12.1-alpine3.16 AS build
 
 WORKDIR /app
 
@@ -8,7 +8,7 @@ RUN npm install
 
 RUN npm run build
 
-FROM node:18.12.1-alpine3.16
+FROM --platform=linux/amd64 node:18.12.1-alpine3.16
 
 WORKDIR /app
 
