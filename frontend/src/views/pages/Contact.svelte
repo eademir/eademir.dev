@@ -31,7 +31,7 @@
         class="mb-8 lg:mb-16 font-light font-serif text-center text-gray-500 dark:text-gray-400 sm:text-xl"
       >
         Got a question? Want to send a feedback? Need details about some of my
-        blogs? Hire me for a freelance project? Let me know.
+        blogs? Want to hire me for a freelance project? Let me know.
       </p>
       <form action="#" class="space-y-8">
         <div>

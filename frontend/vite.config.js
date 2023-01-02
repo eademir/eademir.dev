@@ -1,7 +1,7 @@
 import { defineConfig } from 'vite'
 import { svelte } from '@sveltejs/vite-plugin-svelte'
 import sveltePreprocess from 'svelte-preprocess';
-import mkcert from 'vite-plugin-mkcert'
+import viteCompression from 'vite-plugin-compression';
 
 export default defineConfig({
   server: {
@@ -11,6 +11,6 @@ export default defineConfig({
     svelte({
       preprocess: [sveltePreprocess({ postcss: true })],
     }),
-    mkcert()
+    viteCompression(),
   ],
 })

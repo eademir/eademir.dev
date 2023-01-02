@@ -1,5 +1,5 @@
 <script>
-    //import { message } from '../../stores';
+    import { message, showToast } from "../../stores";
 
     import Loading from "./Loading.svelte";
 
@@ -8,7 +8,6 @@
     $: detail = "";
     $: image_url = "";
     let username;
-    let message;
 
     const updateAbout = async () => {
         await fetch(url, {
@@ -25,7 +24,9 @@
         })
             .then((response) => response.json())
             .then((data) => {
-                message = data.message;
+                showToast.set(true);
+                message.set(data.message);
+                getAbout();
             })
             .catch((error) => {
                 console.error("Error:", error);

@@ -8,6 +8,7 @@
 	import Projects from "./views/pages/Projects.svelte";
 	import { currentPath } from "./stores";
 	import BlogDetail from "./views/pages/BlogDetail.svelte";
+	import CommentPolicy from "./views/pages/CommentPolicy.svelte";
 </script>
 
 <Router primary={false}>
@@ -29,6 +30,9 @@
 		</Route>
 		<Route path="blog/:id" let:params>
 			<BlogDetail id={params.id} />
+		</Route>
+		<Route path="comment-policy">
+			<CommentPolicy />
 		</Route>
 	</main>
 </Router>
